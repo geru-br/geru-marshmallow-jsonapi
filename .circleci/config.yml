@@ -1,0 +1,48 @@
+version: 2
+jobs:
+
+  test:
+    docker:
+      - image: python:3.6.7
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+          name: install poetry and marshmallow_jsonapi dependencies
+          command: |
+            pip install poetry==MANDATORY REPLACING
+            make install
+
+      - run:
+          name: Run Tests
+          command: |
+            make test-all
+
+  deploy:
+    docker:
+      - image: python:3.6.7
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+          name: install poetry
+          command: |
+            pip install poetry==MANDATORY REPLACING twine
+
+      - run:
+          name: bump marshmallow_jsonapi minor version, build and publish to geru-pypi
+          command: |
+            make publish
+
+workflows:
+  version: 2
+  test-and-deploy:
+    jobs:
+      - test
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
