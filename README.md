@@ -19,7 +19,55 @@ pip install marshmallow-jsonapi
 import marshmallow-jsonapi
 ```
 
-* TODO: Review the Installation section
+How to use
+=================
+
+1. Define your marshmallow schema and decorate it
+
+```python
+from marshmallow import Schema, fields
+from marshmallow_jsonapi import JsonApificator 
+
+
+@JsonApificator()
+class BookSchema(Schema):
+    id = fields.Str(dump_only=True)
+    title = fields.Str()
+
+# This Schema expects a payload like:
+{
+    "attributtes": {
+    "id": 1,
+    "title": "This is my personal title"
+    },
+    "id": 1,
+    "type": "books"
+}
+
+```
+
+2. You can customize the default JsonApificator attributes:
+
+```python
+from marshmallow import Schema, fields, validate
+from marshmallow_jsonapi import JsonApificator 
+
+
+@JsonApificator(id={"required": True}, type_={"validate": [validate.Length(min=8, max=200)]}, attributes={"required": True})
+class BookSchema(Schema):
+    id = fields.Str(dump_only=True)
+    title = fields.Str()
+
+# This Schema expects a payload like:
+{
+    "attributtes": { # This is required
+    "id": 1,
+    "title": "This is my personal title"
+    },
+    "id": 1, # This is required
+    "type": "books" # This is required and the min length > 8 and max length < 200
+}
+```
 
 
 How to contribute
