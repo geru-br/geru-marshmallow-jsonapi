@@ -1,5 +1,5 @@
 from marshmallow import Schema, fields, ValidationError
-from marshmallow_jsonapi import JsonApificator
+from geru.marshmallow_jsonapi import JsonApificator
 
 
 def must_be_book(data):
@@ -9,25 +9,21 @@ def must_be_book(data):
 
 @JsonApificator()
 class BookSchemaDefault(Schema):
-    id = fields.Str(dump_only=True)
     title = fields.Str()
 
 
 @JsonApificator(type_={"required": True})
 class BookSchemaTypeRequired(Schema):
-    id = fields.Str(dump_only=True)
     title = fields.Str()
 
 
 @JsonApificator(id={"required": True}, type_={"required": True}, attributes={"required": True})
 class BookSchemaEveryoneRequired(Schema):
-    id = fields.Str(dump_only=True)
     title = fields.Str()
 
 
 @JsonApificator(type_={"validate": must_be_book, "required": True})
 class BookSchemaCustomValidator(Schema):
-    id = fields.Str(dump_only=True)
     title = fields.Str()
 
 
