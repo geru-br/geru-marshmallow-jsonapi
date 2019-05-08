@@ -19,8 +19,8 @@ with open('README.md') as f:
     long_description = f.read()
 
 setup(
-    name='marshmallow_jsonapi',
-    version='0.0.1',
+    name='geru.marshmallow_jsonapi',
+    version='0.1.0',
     description='Marshmallow JsonAPI',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -39,5 +39,5 @@ setup(
     zip_safe=False,
     extras_require=extras_require,
     install_requires=requires,
-    packages=['marshmallow_jsonapi']
+    packages=['geru.marshmallow_jsonapi']
 )
