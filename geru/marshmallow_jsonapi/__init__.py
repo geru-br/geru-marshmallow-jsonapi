@@ -4,6 +4,6 @@
 
 __author__ = """Marcelo Moraes"""
 __email__ = 'marcelo.moraes@geru.com.br'
-__version__ = '0.0.1'
+__version__ = '0.1.0'
 
 from .apificator import JsonApificator
