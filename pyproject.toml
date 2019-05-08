@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "geru.marshmallow-jsonapi"
-version = "0.1.0"
+version = "0.1.2"
 description = "Marshmallow jsonapi is a ext of marshmallow to provide a default contract for GERU REST's API's"
 authors = ["Marcelo Moraes <marcelo.moraes@geru.com.br>"]
 readme = "README.md"
 repository = "https://github.com/geru-br/marshmallow-jsonapi"
 homepage = "https://github.com/geru-br/marshmallow-jsonapi"
 packages = [
-    { include = "marshmallow_jsonapi", from = "geru" },
+    { include = "geru"},
     ]
 
 [tool.poetry.dependencies]
