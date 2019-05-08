@@ -10,13 +10,13 @@ Installation
 1. Go to directory and, install the lib
 
 ```
-pip install marshmallow-jsonapi
+pip install geru.marshmallow-jsonapi
 ```
 
 2. Just code with it. Inside you python app:
 
 ```
-import marshmallow-jsonapi
+from geru.marshmallow-jsonapi import JsonApificator
 ```
 
 How to use
@@ -26,7 +26,7 @@ How to use
 
 ```python
 from marshmallow import Schema, fields
-from marshmallow_jsonapi import JsonApificator 
+from geru.marshmallow-jsonapi import JsonApificator 
 
 
 @JsonApificator()
@@ -50,7 +50,7 @@ class BookSchema(Schema):
 
 ```python
 from marshmallow import Schema, fields, validate
-from marshmallow_jsonapi import JsonApificator 
+from geru.marshmallow-jsonapi import JsonApificator 
 
 
 @JsonApificator(id={"required": True}, type_={"validate": [validate.Length(min=8, max=200)]}, attributes={"required": True})
