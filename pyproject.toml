@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "geru.marshmallow-jsonapi"
+name = "geru.marshmallow_jsonapi"
 version = "0.1.0"
 description = "Marshmallow jsonapi is a ext of marshmallow to provide a default contract for GERU REST's API's"
 authors = ["Marcelo Moraes <marcelo.moraes@geru.com.br>"]
