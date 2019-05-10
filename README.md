@@ -16,7 +16,7 @@ pip install geru.marshmallow-jsonapi
 2. Just code with it. Inside you python app:
 
 ```
-from geru.marshmallow-jsonapi import JsonApificator
+from geru.marshmallow_jsonapi import JsonApificator
 ```
 
 How to use
@@ -26,7 +26,7 @@ How to use
 
 ```python
 from marshmallow import Schema, fields
-from geru.marshmallow-jsonapi import JsonApificator 
+from geru.marshmallow_jsonapi import JsonApificator 
 
 
 @JsonApificator()
@@ -36,12 +36,13 @@ class BookSchema(Schema):
 
 # This Schema expects a payload like:
 {
-    "attributtes": {
-    "id": 1,
-    "title": "This is my personal title"
-    },
-    "id": 1,
-    "type": "books"
+    "data":{
+        "attributtes": {
+            "title": "This is my personal title"
+        },
+        "id": 1,
+        "type": "books"
+    }
 }
 
 ```
@@ -50,7 +51,7 @@ class BookSchema(Schema):
 
 ```python
 from marshmallow import Schema, fields, validate
-from geru.marshmallow-jsonapi import JsonApificator 
+from geru.marshmallow_jsonapi import JsonApificator 
 
 
 @JsonApificator(id={"required": True}, type_={"validate": [validate.Length(min=8, max=200)]}, attributes={"required": True})
@@ -60,15 +61,62 @@ class BookSchema(Schema):
 
 # This Schema expects a payload like:
 {
-    "attributtes": { # This is required
-    "id": 1,
-    "title": "This is my personal title"
-    },
-    "id": 1, # This is required
-    "type": "books" # This is required and the min length > 8 and max length < 200
+    "data": {
+        "attributtes": { # This is required
+            "title": "This is my personal title"
+        },
+        "id": 1, # This is required
+        "type": "books" # This is required and the min length > 8 and max length < 200
+    }
 }
 ```
 
+3. Working with relationships:
+
+```python
+
+from marshmallow import Schema, fields, ValidationError
+from geru.marshmallow_jsonapi import JsonApificator 
+
+class PublishSchema(Schema):
+    name = fields.Str()
+
+
+class AuthorSchema(Schema):
+    name = fields.Str()
+
+    
+def must_be_book(data):
+    if data != 'book':
+        raise ValidationError('type must be book')
+        
+
+@JsonApificator(type_={"validate": must_be_book, "required": True}, relationship=[{"relationship": AuthorSchema,
+                                                                                   "extra_kwargs": {"required": True}},
+                                                                                  {"relationship": PublishSchema}])
+class BookSchemaRelationship(Schema):
+    title = fields.Str()
+
+# This Schema expects a payload like:
+{
+    "data": {
+        "attributtes": { # This is required
+            "title": "This is my personal title"
+        },
+        "id": 1, # This is required
+        "type": "book", # The type must be book 
+        "relationship": {
+            "author_schema": {
+                "name": "Jose"
+            },
+            "publish_schema": {
+                "name": "Martin"
+            }
+        }
+    }
+}
+
+```
 
 How to contribute
 =================
