@@ -46,8 +46,9 @@ class JsonApificator(object):
                 _required['required'] = True
             data = ma.fields.Nested(JsonApi, **_required)
 
-        JsonApi.orig = cls
-        JsonApi.__name__ = 'JsonApi_' + cls.__name__
-        JsonApi.description = "JSONAPI"
-        register(JsonApi.__name__, JsonApi)
+        Data.orig = cls
+        Data.__name__ = 'JsonApi_' + cls.__name__
+        Data.description = 'JsonApi_' + cls.__name__
+        Data.children = []
+        register(Data.__name__, Data)
         return Data
