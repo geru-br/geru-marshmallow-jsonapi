@@ -118,6 +118,17 @@ class BookSchemaRelationship(Schema):
 
 ```
 
+4. Default JsonApi Error Exception:
+Example:
+```python
+from geru.marshmallow_jsonapi.exceptions import BaseApiException
+
+message = 'Invalid credentials'
+e = BaseApiException(message=message, status=403)
+e.message == {'error': message, 'status': 403}
+```
+
+
 How to contribute
 =================
 
