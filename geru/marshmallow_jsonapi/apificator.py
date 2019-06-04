@@ -6,11 +6,12 @@ from geru.marshmallow_jsonapi.helpers import camel_case_to_underscore
 
 
 class JsonApificator(object):
-    def __init__(self, type_={}, attributes={}, id={}, relationship=[]):
+    def __init__(self, type_={}, attributes={}, id={}, relationship=[], params_description={}):
         self._type = type_
         self._attributes = attributes
         self._id = id
         self._relationship = relationship
+        self._params_description = params_description
 
     def __call__(self, cls):
 
@@ -50,5 +51,6 @@ class JsonApificator(object):
         Data.__name__ = 'JsonApi_' + cls.__name__
         Data.description = 'JsonApi_' + cls.__name__
         Data.children = []
+        Data.params_description = self._params_description
         register(Data.__name__, Data)
         return Data
