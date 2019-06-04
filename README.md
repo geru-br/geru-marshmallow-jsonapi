@@ -128,6 +128,36 @@ e = BaseApiException(message=message, status=403)
 e.message == {'error': message, 'status': 403}
 ```
 
+Using marshmallow-jsonapi with Cornice
+======================================
+```python
+from cornice import Service
+from cornice.validators import marshmallow_body_validator
+from marshmallow import Schema, fields
+from geru.marshmallow_jsonapi import JsonApificator
+
+
+manage_books = Service(name='manage_books',
+                       path='/books/{bookId}',
+                       description='Manage books')
+
+@JsonApificator(type_={"required": True}, params_description={"bookId": "Book UUID"})
+class BookSchema(Schema):
+    title = fields.Str()
+
+book_response_schemas = {
+    '200': BookSchema,
+}
+
+@manage_books.put(schema=BookSchema,
+                  validators=(marshmallow_body_validator,),
+                  response_schemas=book_response_schemas,
+                  content_type='application/json')
+def _put_books(request):
+    # TODO: do something
+    return {}
+```
+
 
 How to contribute
 =================
