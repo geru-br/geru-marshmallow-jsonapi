@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import marshmallow as ma
 
 from marshmallow.class_registry import register
@@ -17,12 +19,33 @@ class JsonApificator(object):
 
         def dump(cls, obj, many=None):
             with_meta = dict(attributes=obj, type=cls.__name__)
-            return super(JsonApi, self).dump(with_meta, many=None)
+            return super(Data, self).dump(with_meta, many=None)
+
+        cls_instance = cls()
+        # Check if schema is an inheritance of another decorated schema with JsonApificator
+        # Eg:
+        #     @JsonApificator(attributes={"required": True})
+        #     class Father(Schema):
+        #         name = fields.Str(required=True)
+        #         age = fields.Int(required=True)
+        #         cpf = fields.Str()
+        #
+        #     @JsonApificator(attributes={"required": True})
+        #     class Child(Person):
+        #         name = fields.Str(required=False)
+        #         age = fields.Int(required=False)
+        # In this case it needs overwrite the attributes with the new attributes
+        if 'data' in cls_instance.fields:
+            nested = (cls_instance.fields.pop('data')).nested()
+            # deepcopy is necessary to not overwrite the Father attributes schema
+            old_fields = deepcopy(nested.fields['attributes'].schema.fields)
+            old_fields.update(cls_instance.fields)
+            cls_instance.fields = old_fields
 
         json_api_fields = {
             "id": ma.fields.Str(**self._id),
             "type": ma.fields.Str(**self._type),
-            "attributes": ma.fields.Nested(cls(), **self._attributes)
+            "attributes": ma.fields.Nested(cls_instance, **self._attributes)
         }
         # If any relationship is informed, then it will be necessary to set them in Relatioship
         if self._relationship:
@@ -46,8 +69,8 @@ class JsonApificator(object):
             if self._type.get('required') or self._attributes.get('required') or self._id.get('required'):
                 _required['required'] = True
             data = ma.fields.Nested(JsonApi, **_required)
-
-        Data.orig = cls
+        Data.dump = classmethod(dump)
+        Data.orig = cls_instance
         Data.__name__ = 'JsonApi_' + cls.__name__
         Data.description = 'JsonApi_' + cls.__name__
         Data.children = []
