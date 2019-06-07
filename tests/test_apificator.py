@@ -1,56 +1,13 @@
-from marshmallow import Schema, fields, ValidationError
-from geru.marshmallow_jsonapi import JsonApificator
-
-
-def must_be_book(data):
-    if data != 'book':
-        raise ValidationError('type must be book')
-
-
-def must_be_author(data):
-    if data != 'author':
-        raise ValidationError('type must be author')
-
-
-@JsonApificator()
-class BookSchemaDefault(Schema):
-    title = fields.Str()
-
-
-@JsonApificator(type_={"required": True})
-class BookSchemaTypeRequired(Schema):
-    title = fields.Str()
-
-
-@JsonApificator(id={"required": True}, type_={"required": True}, attributes={"required": True})
-class BookSchemaEveryoneRequired(Schema):
-    title = fields.Str()
-
-
-@JsonApificator(type_={"validate": must_be_book, "required": True})
-class BookSchemaCustomValidator(Schema):
-    title = fields.Str()
-
-
-class PublishSchema(Schema):
-    name = fields.Str()
-
-
-class AuthorSchema(Schema):
-    name = fields.Str()
-
-
-@JsonApificator(type_={"validate": must_be_book, "required": True}, relationship=[{"relationship": AuthorSchema,
-                                                                                   "extra_kwargs": {"required": True}}])
-class BookSchemaRelationship(Schema):
-    title = fields.Str()
-
-
-@JsonApificator(type_={"validate": must_be_book, "required": True}, relationship=[{"relationship": AuthorSchema,
-                                                                                   "extra_kwargs": {"required": True}},
-                                                                                  {"relationship": PublishSchema}])
-class BookSchemaWithTwoRelationship(Schema):
-    title = fields.Str()
+from .schemas import (
+    BookSchemaDefault,
+    BookSchemaTypeRequired,
+    BookSchemaEveryoneRequired,
+    BookSchemaCustomValidator,
+    BookSchemaRelationship,
+    BookSchemaWithTwoRelationship,
+    Father,
+    Child
+)
 
 
 class TestApificator:
@@ -159,3 +116,9 @@ class TestApificator:
         }
         book = BookSchemaWithTwoRelationship().load(_payload)
         assert not book.errors
+
+    def test_inheritance(self):
+        assert Father().validate({"data": {"attributes": {}}}) == {
+            'data': {'attributes': {'age': [u'Missing data for required field.'],
+                                    'name': [u'Missing data for required field.']}}}
+        assert Child().validate({"data": {"attributes": {}}}) == {}
