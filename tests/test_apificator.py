@@ -6,8 +6,8 @@ from .schemas import (
     BookSchemaRelationship,
     BookSchemaWithTwoRelationship,
     Father,
-    Child
-)
+    Child,
+    Many)
 
 
 class TestApificator:
@@ -122,3 +122,8 @@ class TestApificator:
             'data': {'attributes': {'age': [u'Missing data for required field.'],
                                     'name': [u'Missing data for required field.']}}}
         assert Child().validate({"data": {"attributes": {}}}) == {}
+
+    def test_many_true(self):
+        assert Many().validate({"data": []}) == {}
+        assert Many().validate({"data": [{"name": 12345.12}]}) == {
+            'data': {0: {'name': ['Not a valid string.'], 'age': ['Missing data for required field.']}}}
