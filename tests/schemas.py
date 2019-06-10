@@ -64,3 +64,21 @@ class Father(Schema):
 class Child(Father):
     name = fields.Str(required=False)
     age = fields.Int(required=False)
+
+
+class Meta(Schema):
+    count = fields.Int(dump_only=True)
+
+
+class Links(Schema):
+    next = fields.Str(dump_only=True)
+    previous = fields.Str(dump_only=True)
+
+
+@JsonApificator(many=True, other_attributes=[{"schema": Links,
+                                              "name": "links",
+                                              "attrs": {"many": True}},
+                                             {"schema": Meta,
+                                              "name": "meta"}])
+class Many(Father):
+    name = fields.Str(required=False)
