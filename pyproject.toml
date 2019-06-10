@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "geru.marshmallow-jsonapi"
-version = "0.1.7"
+version = "0.1.8"
 description = "Marshmallow jsonapi is a ext of marshmallow to provide a default contract for GERU REST's API's"
 authors = ["Marcelo Moraes <marcelo.moraes@geru.com.br>"]
 readme = "README.md"
