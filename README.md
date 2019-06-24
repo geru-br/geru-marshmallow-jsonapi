@@ -91,9 +91,9 @@ def must_be_book(data):
         raise ValidationError('type must be book')
         
 
-@JsonApificator(type_={"validate": must_be_book, "required": True}, relationship=[{"relationship": AuthorSchema,
+@JsonApificator(type_={"validate": must_be_book, "required": True}, relationships=[{"relationships": AuthorSchema,
                                                                                    "extra_kwargs": {"required": True}},
-                                                                                  {"relationship": PublishSchema}])
+                                                                                  {"relationships": PublishSchema}])
 class BookSchemaRelationship(Schema):
     title = fields.Str()
 
@@ -105,7 +105,7 @@ class BookSchemaRelationship(Schema):
         },
         "id": 1, # This is required
         "type": "book", # The type must be book 
-        "relationship": {
+        "relationships": {
             "author_schema": {
                 "name": "Jose"
             },

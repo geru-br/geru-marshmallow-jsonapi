@@ -67,11 +67,11 @@ class TestApificator:
     def test_one_relationship(self):
         _payload = {
             "data": {
-                "relationship": {}
+                "relationships": {}
             }
         }
         book = BookSchemaRelationship().load(_payload)
-        assert book.errors['data']['relationship']
+        assert book.errors['data']['relationships']
         assert book.errors['data']['type']
         _payload = {
             "data": {
@@ -79,7 +79,7 @@ class TestApificator:
                 "attributes": {
                     "title": "It"
                 },
-                "relationship": {
+                "relationships": {
                     "author_schema": {
                         "name": "Jose"
                     }
@@ -89,14 +89,14 @@ class TestApificator:
         book = BookSchemaRelationship().load(_payload)
         assert not book.errors
 
-    def test_two_relationship(self):
+    def test_two_relationships(self):
         _payload = {
             "data": {
-                "relationship": {}
+                "relationships": {}
             }
         }
         book = BookSchemaWithTwoRelationship().load(_payload)
-        assert len(book.errors['data']['relationship']) == 1
+        assert len(book.errors['data']['relationships']) == 1
         assert book.errors['data']['type']
         _payload = {
             "data": {
@@ -104,7 +104,7 @@ class TestApificator:
                 "attributes": {
                     "title": "It"
                 },
-                "relationship": {
+                "relationships": {
                     "author_schema": {
                         "name": "Jose"
                     },

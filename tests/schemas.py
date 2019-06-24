@@ -40,15 +40,15 @@ class AuthorSchema(Schema):
     name = fields.Str()
 
 
-@JsonApificator(type_={"validate": must_be_book, "required": True}, relationship=[{"relationship": AuthorSchema,
+@JsonApificator(type_={"validate": must_be_book, "required": True}, relationships=[{"relationships": AuthorSchema,
                                                                                    "extra_kwargs": {"required": True}}])
 class BookSchemaRelationship(Schema):
     title = fields.Str()
 
 
-@JsonApificator(type_={"validate": must_be_book, "required": True}, relationship=[{"relationship": AuthorSchema,
+@JsonApificator(type_={"validate": must_be_book, "required": True}, relationships=[{"relationships": AuthorSchema,
                                                                                    "extra_kwargs": {"required": True}},
-                                                                                  {"relationship": PublishSchema}])
+                                                                                   {"relationships": PublishSchema}])
 class BookSchemaWithTwoRelationship(Schema):
     title = fields.Str()
 
