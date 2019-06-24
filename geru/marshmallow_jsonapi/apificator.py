@@ -8,14 +8,14 @@ from geru.marshmallow_jsonapi.helpers import camel_case_to_underscore
 
 
 class JsonApificator(object):
-    def __init__(self, type_={}, attributes={}, id={}, relationship=[], params_description={}, other_attributes=[],
-            many=False):
+    def __init__(self, type_={}, attributes={}, id={}, relationships=[], params_description={}, other_attributes=[],
+                 many=False):
         """
         JsonApificator
         :param type_: Type of schema Eg: {"required": "True"}
         :param attributes:
         :param id:
-        :param relationship:
+        :param relationships:
         :param params_description:
         :param other_attributes: Eg ["schema": Link, "name": "link", "attrs": {"many": True}]
         :param many:
@@ -23,7 +23,7 @@ class JsonApificator(object):
         self._type = type_
         self._attributes = attributes
         self._id = id
-        self._relationship = relationship
+        self._relationships = relationships
         self._params_description = params_description
         self._many = many
         self._other_attributes = other_attributes
@@ -62,17 +62,17 @@ class JsonApificator(object):
         }
 
         # If any relationship is informed, then it will be necessary to set them into Relatioship
-        if self._relationship:
-            relationship_fields = {}
-            for relation in self._relationship:
+        if self._relationships:
+            relationships_fields = {}
+            for relation in self._relationships:
                 # Convert camel case class name to underscore pattern and then add itself in Nested field
-                relationship_fields[camel_case_to_underscore(relation['relationship'].__name__)] = ma.fields.Nested(
-                    relation['relationship'],
+                relationships_fields[camel_case_to_underscore(relation['relationships'].__name__)] = ma.fields.Nested(
+                    relation['relationships'],
                     **relation.get(
                         'extra_kwargs', {}))
             # Create Relatioship class with its attributes
-            Relationship = type('Relationship', (ma.Schema,), relationship_fields)
-            json_api_fields['relationship'] = ma.fields.Nested(Relationship())
+            Relationships = type('Relationships', (ma.Schema,), relationships_fields)
+            json_api_fields['relationships'] = ma.fields.Nested(Relationships())
 
         if self._many:
             attr_pop = json_api_fields.pop('attributes')
